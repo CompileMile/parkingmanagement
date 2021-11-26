@@ -7,15 +7,25 @@
 #include <errno.h>
 #include <arpa/inet.h>
 #include <pthread.h>
+#include <mysql.h>
+#include "headers/connection.h"
+#include "headers/login.h"
 
-#define PORT 8081
 
-int login(char username[30],  char password[30]);
+#define PORT 8080
+
+
+
 
 void *connection_handler(void *);
 
 int main(int argc, char *argv[])
 {
+    puts("OK!");
+
+    // This function in connection.h header file
+    connect_to_database();
+   
 
     int server_socket, client_socket, client_len, *new_socket;
     struct sockaddr_in server_address, client_address;
@@ -74,7 +84,7 @@ int main(int argc, char *argv[])
     // close(client_socket);
     close(server_socket);
 
-    return 0;
+        return 0;
 }
 
 void *connection_handler(void *server_socket)
@@ -143,22 +153,9 @@ void *connection_handler(void *server_socket)
     {
         perror("[-] Receive failed\n");
     }
+
+    
     free(server_socket);
     return 0;
 }
 
-int login(char username[30],  char password[30]){
-    const int NOT_AUTH=0;
-    const int LOGGED_IN = 1;
-    puts("Login function called");
-    printf("%s\n", username);
-    printf("%s\n", password);
-    puts(username);
-    if(strcmp(username,"bekzod")==0){
-        if(strcmp(password,"123")==0){
-            return LOGGED_IN;
-        }
-    }
-
-    return NOT_AUTH;
-}
